@@ -41,16 +41,16 @@ I start by preparing "object points", which will be the (x, y, z) coordinates of
 
 I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result: 
 
-![alt text](.\Images\CameraCalibration.JPG)
+![alt text](./Images/CameraCalibration.JPG)
 
 ## Pipeline (single images)
 The following input frame is taken for explaining my code
-![inputimage](.\Images\InputFrame.jpg)
+![inputimage](./Images/InputFrame.jpg)
 
 ### 1. Provide an example of a distortion-corrected image.
 
 I have used the camera matrix and distortion co-efficient obtained from function `calibrateCamera`, to undistort the input image. The below one is the distortion corrected image
-![inputimage](.\Images\Distortion_Correction.JPG)
+![inputimage](./Images/Distortion_Correction.JPG)
 > **Note** : As I am using `cv2 library` to read images and `matplotlib.pyplot` to display, The color of the input & undistorted images are modified in the above image 
 
 ### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
@@ -59,16 +59,16 @@ I have used the camera matrix and distortion co-efficient obtained from function
 >> I have chose the RGB & HSV color spaces for performing color threshold. From the below output images, It is observed that `R Channel` from RGB and `S Channel` from HSV are good.
 >> + R Channel : Good in detecting white lines
 >> + S Channel : Helps in removing the effect of light variation
->> ![ChannelSelection](.\Images\ChannelSelection.JPG)
+>> ![ChannelSelection](./Images/ChannelSelection.JPG)
 
 > ### Apply Color Threshold
 >> Here, I am applying color thershold to get the required features from the selected channel. `color_thresh` method ( written in cell 9) helps to do color thresholding. 
->> ![ColorThreshold](.\Images\ColorThresholding.JPG)
+>> ![ColorThreshold](./Images/ColorThresholding.JPG)
 >> After applying color thershold, the lane lines are detected more clearly than the normal version. At the same time, it introduced some noises in the output image also.
 
 > ### Combine Color Channel
 >> The combination of R Channel and S channel will remove the noise as well as it will help to detect the lane lines in different condition. `Combine_RS` method ( written in cell 11) will combine both R & S Channel with pre-defined boundary. 
->> ![CombineColorChannel](.\Images\CombineChannel.JPG)
+>> ![CombineColorChannel](./Images/CombineChannel.JPG)
 
 ----
 
@@ -78,7 +78,7 @@ I have used the camera matrix and distortion co-efficient obtained from function
 >> We can perform gradient thershold by ***THREE*** ways. They are `Sobel X`, `Sobel Y` and `Sobel XY`.
 
 >> We can apply both magnitude as well as direction thershold on each of the above Sobel operator. one common method `dir_threshold` (written in cell 13) will be used to perform any of the above combinations.
->> ![GradientThershold](.\Images\GradientThreshold.JPG)
+>> ![GradientThershold](./Images/GradientThreshold.JPG)
 >> From the above output, Magnitude gradient worked well in detecting lane lines
 
 ----
@@ -86,11 +86,11 @@ I have used the camera matrix and distortion co-efficient obtained from function
 > ### Combine Color & Gradient Threshold
 >> We are going to combine the R&S channel output with Magnitude gradient thershold. 
 >> They were combined using `OR gate`, as we don't want to lose any input informations.
->> ![Combine](.\Images\combine.JPG)
+>> ![Combine](./Images/combine.JPG)
 
 ----
 Finally, The whole process is simplified into one method `cvtToBinary`. This will take `UnDistorted Image` as input and produces `Binary Image` as output. This method is implemented in cell 17.
->> ![Combine](.\Images\cvtBinary.JPG)
+>> ![Combine](./Images/cvtBinary.JPG)
 
 ### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
@@ -103,7 +103,7 @@ The code for my perspective transform includes a function called `ImageWrapper()
 | 193,667       | 193,667       |
 | 567,461       | 193,29        |
 
-![PerspectiveTransform](.\Images\PerspectiveTransform.JPG)
+![PerspectiveTransform](./Images/PerspectiveTransform.JPG)
 
 ### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 I am using `sliding lines` methodology to find the lane lines in warped image. This is similar to `Sliding Window`. Instead of taking non-zero points in each window, this will take non-zero points in selected line. The aim of this method to improve speed of the lane detection by performing less computation.
@@ -119,7 +119,7 @@ I am using `sliding lines` methodology to find the lane lines in warped image. T
 The above algorithm is implementes in `getCoOrdinates` method written in 22nd cell
 
 >Detected Points
->![DetectingPoints](.\Images\DetectedPoints.JPG)
+>![DetectingPoints](./Images/DetectedPoints.JPG)
 
 From the above picture, we can see large portion of unwanted noises are omitted by our algorithm. At the same time, there can be chances that it may skip some valid co-ordinates (or) some times there may be no points detected in the lane. These problems are handled by remembering the past frame details. The detailed implementation will be present in the method `CoOrdinateCorrection` written in 24th cell.
 
@@ -132,7 +132,7 @@ Conditions used in correcting co-ordinates:
 
 Method `DrawLines` written in cell no 25 will return the modified co-ordinate values. This is the final points which is used for plotting lines. `FindLanes` (cell no:27) used to fill the color between the detected lines.
 
->![DrawLines](.\Images\FindLane.JPG)
+>![DrawLines](./Images/FindLane.JPG)
 
 
 ### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center
@@ -158,7 +158,7 @@ They above calculations are done in `UpdateComments` method (cell no:)
 ### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
 The whole pipeline is compressed into one final method `Update_Frame` implemented in cell no #.
->![ResultFrame](.\Images\ResultFrame.JPG)
+>![ResultFrame](./Images/ResultFrame.JPG)
 
 ### Pipeline (video)
 
